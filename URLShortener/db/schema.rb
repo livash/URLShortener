@@ -11,20 +11,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130529203420) do
+ActiveRecord::Schema.define(:version => 20130529235826) do
 
   create_table "long_urls", :force => true do |t|
     t.string   "long_url"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-    t.integer  "short_url_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "short_urls", :force => true do |t|
     t.string   "short_url"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.integer  "user_id"
+    t.integer  "long_url_id"
+  end
+
+  create_table "tag_topics", :force => true do |t|
+    t.string "topic"
+  end
+
+  create_table "taggings", :force => true do |t|
+    t.integer "short_url_id"
+    t.integer "tag_topic_id"
+    t.integer "user_id"
   end
 
   create_table "users", :force => true do |t|

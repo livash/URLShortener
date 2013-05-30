@@ -1,8 +1,10 @@
 class ShortUrl < ActiveRecord::Base
-  attr_accessible :short_url, :user_id
+  attr_accessible :short_url, :user_id, :long_url_id
   has_many :visits
   has_many :users, :through => :visits
   has_one :long_url
+  has_many :tag_topics, :through => :taggings
+  has_many :taggings
 
   def visits_count
     self.visits.count
@@ -16,7 +18,5 @@ class ShortUrl < ActiveRecord::Base
     time_now = Time.now
     time_then = time_now - n * 60
     self.visits.where("created_at > ?", time_then).count
-    # all_visits = self.visits.select { |visit| visit[:created_at] > time_then }
-#     all_visits.count
   end
 end

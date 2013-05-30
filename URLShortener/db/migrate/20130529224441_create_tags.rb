@@ -1,7 +1,13 @@
 class CreateTags < ActiveRecord::Migration
-  def up
-  end
+  def change
+    create_table :tag_topics do |t|
+      t.string :topic
+    end
 
-  def down
+    create_table :taggings do |ts|
+      ts.integer :short_url_id
+      ts.integer :tag_topic_id
+      ts.integer :user_id
+    end
   end
 end
