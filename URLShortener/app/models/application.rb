@@ -8,7 +8,8 @@ class Application
   attr_accessor :name, :email, :user, :urls
 
   def create_user
-    @user = User.new(:name => name, :email => email).save!
+    @user = User.new(:name => name, :email => email)
+    @user.save! if @user.new_record?
   end
 
   def initialize
@@ -17,9 +18,9 @@ class Application
 
   def ask_user_for_name
     puts "What is your name?"
-    name = gets.chomp
+    @name = gets.chomp
     puts "What is your email?"
-    email = gets.chomp
+    @email = gets.chomp
   end
 
   def ask_user_for_option
@@ -36,8 +37,11 @@ class Application
 
   def shorten_url(long_url_str)
     string= "#{long_url[0]} + #{rand(100)}"
-    long_url = LongUrl.new(:long_url => long_url_str).save!
-    ShortUrl.new(:short_url => string, :long_url_id => long_url.id).save!
+    long_url = LongUrl.new(:long_url => long_url_str)
+    long_url.save! if long_url.new_record?
+    
+    short_url = ShortUrl.new(:short_url => string, :long_url_id => long_url.id)
+    short_url.save! if short_url.new_record?
 
   end
 
@@ -45,7 +49,7 @@ class Application
     Launchy(short_url)
     short_id = ShortUrl.find_by_short_url(short_url_str).id
 
-    Visit.new(:short_url_id => short_id, :user_id, :comment => '')
+   # Visit.new(:short_url_id => short_id, :user_id, :comment => '')
   end
 
 
@@ -58,7 +62,6 @@ if __FILE__ == $PROGRAM_NAME
   app.ask_user_for_name
   app.create_user
 
-  begin
     choice = ask_user_for_option
 
     case choice
@@ -68,10 +71,5 @@ if __FILE__ == $PROGRAM_NAME
       visit_page(get_url)
     else
       raise 'Incorrect input ....'
-  rescue
-    retry
     end
-  end
-
-
 end
